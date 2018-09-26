@@ -1,0 +1,22 @@
+{
+  "name": "appart",
+  "version": "1.0.0",
+  "description": "appart app",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com/vincent-ledu/apartment"
+  },
+  "keywords": [
+    "apartment",
+    "qrcode"
+  ],
+  "author": "Vincent Le Du",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.16.3"
+  }
+}
