@@ -6,13 +6,37 @@ const bodyParser = require('body-parser'); // Charge le middleware de gestion de
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
 const morgan = require('morgan'); // Charge le middleware de logging
 const favicon = require('serve-favicon'); // Charge le middleware de favicon
-//const multer  = require('multer')
-//const JsonDB = require('node-json-db');
-//const Jimp = require("jimp");
+const mongoose = require('mongoose')
+
+
+const db_host = 'localhost'
+const db_port = 27017
+const db_options = { server: { socketOptions: { keepAlive: 300000, connectTimeoutMS: 30000 } }, 
+                      replset: { socketOptions: { keepAlive: 300000, connectTimeoutMS : 30000 } } };
+
+const MongoClient = require('mongodb').MongoClient;
+const urlmongo = "mongodb://"+db_host+":"+db_port+"/apartments";
+mongoose.connect(urlmongo, db_options);
+
+const db = mongoose.connection; 
+db.on('error', console.error.bind(console, 'Erreur lors de la connexion')); 
+db.once('open', function (){
+  console.log("Connexion à la base OK"); 
+}); 
+
+const apartmentSchema = mongoose.Schema({
+  title: String,
+  description: String,
+  adresse: String,
+  price: String,
+  tel: String
+});
+const Apartment = mongoose.model('Apartment', apartmentSchema);
 
 
 app.use(session({ secret: 'calendarsessionsecret' }))
 .use(morgan('combined'))
+.use(bodyParser.urlencoded({extended: false}))
 .use(express.static(__dirname + '/public'))
 .use(favicon(__dirname + '/public/favicon.png'));
 
@@ -21,19 +45,37 @@ app.get('/', function (req, res) {
 })
 
 app.get('/apartments/', function (req, res) {
-  res.render('appartments.ejs')
+  console.log("entering get /apartments");
+  Apartment.find(function(err, apartments){
+    console.log("in find apartments");
+    if (err){
+        res.send(err); 
+    }
+    console.log("found " + apartments.length + " apartment(s).")
+    console.log('launch render apartments');
+
+    res.render('appartments.ejs', {apartments: apartments});
+  }); 
+  
 })
 
 app.post('/apartments/', function(req, res, next) {
   if (req.body.title != 'undefined' && req.body.title != '') {
-    var title = req.body.title
+    var apartment = new Apartment();
+    apartment.title =  req.body.title;
+    apartment.description = req.body.description;
+    console.log("title: "+apartment.title+" - description: " + apartment.description);
+    apartment.save(function(err) {
+      if (err) {
+        res.send(err);
+      }
+    });
+
   }
   else {
-    console.log("title is not defined")
+    console.log("title is not defined");
   }
-  var description = req .body.description
-  console.log()
-  res.redirect('/apartments')
+  res.redirect('/apartments');
 })
 
 app.listen(3000, function () {
