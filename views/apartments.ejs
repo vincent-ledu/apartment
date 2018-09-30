@@ -1,0 +1,69 @@
+  <%- include('navigation') -%>
+    <main class="mdl-layout__content">
+      <div class="page-content">
+        <h1 class="">Apartments</h1>
+        <form action="/apartments" method="post">
+          <div class="mdl-grid">
+            <div class="mdl-textfield mdl-js-textfield">
+              <label class="mdl-textfield__label" for="title">Title</label>
+              <input type="text" name="title" class="mdl-textfield__input" />
+            </div>
+          </div>
+          <div class="mdl-grid">
+            <div class="mdl-textfield mdl-js-textfield">
+              <label class="mdl-textfield__label" for="description">Description</label>
+              <textarea class="mdl-textfield__input" type="text" rows="6" cols="600" name="description"></textarea>
+            </div>
+          </div>
+          <div class="mdl-grid">
+            <div class="mdl-textfield mdl-js-textfield">
+              <label class="mdl-textfield__label" for="address">Adresse</label>
+              <textarea class="mdl-textfield__input" type="text" rows="3"  name="address"></textarea>
+            </div>
+          </div>
+          <div class="mdl-grid">
+            <div class="mdl-textfield mdl-js-textfield">
+              <label class="mdl-textfield__label" for="price">Price</label>
+              <input class="mdl-textfield__input" type="text" name="price" />
+            </div>
+          </div>
+          <div class="mdl-grid">
+            <div class="mdl-textfield mdl-js-textfield">
+              <label class="mdl-textfield__label" for="contact">Contact</label>
+              <input class="mdl-textfield__input" type="text" name="contact" />
+            </div>
+          </div>
+          <div class="mdl-grid">
+            <div class="mdl-cell mdl-cell--6-col">
+              <input type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect" value="Sauver"/>
+            </div>
+          </div>
+        </form>
+        <table class="mdl-data-table mdl-js-data-table">
+          <thead>
+            <tr>
+              <th class="mdl-data-table__cell--non-numeric">ID</th>
+              <th class="mdl-data-table__cell--non-numeric">Title</th>
+              <th class="mdl-data-table__cell--non-numeric">Address</th>
+              <th class="mdl-data-table__cell--non-numeric">Price</th>
+            </tr>
+          </thead>
+          <tbody>
+              <% 
+              for (var i = 0; i < apartments.length; i++) {
+                %>
+                <tr>
+                  <td class="mdl-data-table__cell--non-numeric"><a href="/apartments/<%= apartments[i].id %>"><%= apartments[i].id %></a></td>
+                  <td class="mdl-data-table__cell--non-numeric"><%= apartments[i].title %></td>
+                  <td class="mdl-data-table__cell--non-numeric"><%= apartments[i].address %></td>
+                  <td><%= apartments[i].price %></td>
+                </tr>
+                <%
+              }
+            %>
+          </tbody>
+        </table>
+        
+      </div>
+    </main>
+    <%- include('footer') -%>
